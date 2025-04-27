@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Home</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Добро пожаловать, <span th:text="${user.username}">Username</span>!</h1>
+
+<div>
+    <h3>Информация о пользователе:</h3>
+    <ul>
+        <li><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></li>
+        <li><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></li>
+        <li><strong>Роли:</strong>
+            <ul>
+                <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Выйти</button>
+</form>
+</body>
+</html>
