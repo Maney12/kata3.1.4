@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.dao;
 
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+
 import java.util.List;
 
 public interface UserDao {
@@ -15,4 +17,6 @@ public interface UserDao {
     public User findById(long id);
 
     User findByUsername(String username);
+
+    void saveRole(Role role);
 }

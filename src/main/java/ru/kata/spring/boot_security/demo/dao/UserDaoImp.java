@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
@@ -11,7 +12,7 @@ import java.util.List;
 public class UserDaoImp implements UserDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public void add(User user) {
@@ -26,9 +27,9 @@ public class UserDaoImp implements UserDao {
     @Override
     public void updateUser(User user) {
         if (user.getId() != null) {
-            entityManager.merge(user); // Слияние с существующей записью
+            entityManager.merge(user);
         } else {
-            entityManager.persist(user); // Если нет ID, создаем новый
+            entityManager.persist(user);
         }
     }
 
@@ -50,6 +51,11 @@ public class UserDaoImp implements UserDao {
         return entityManager.createQuery("from User where username = :username", User.class)
                 .setParameter("username", username)
                 .getSingleResult();
+    }
+
+    @Override
+    public void saveRole(Role role) {
+        entityManager.persist(role);
     }
 
 

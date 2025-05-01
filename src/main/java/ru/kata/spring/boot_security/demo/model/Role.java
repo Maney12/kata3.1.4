@@ -11,9 +11,8 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
     private String name;
+
 
     public Long getId() {
         return id;
@@ -48,10 +47,5 @@ public class Role implements GrantedAuthority {
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
         return Objects.equals(id, role.id) && Objects.equals(name, role.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
     }
 }

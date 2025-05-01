@@ -5,21 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserDetailService;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
 @RequestMapping(value = "/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
-    final UserDetailService service;
+    private final UserService service;
 
     @Autowired
-    public AdminController(UserDetailService service) {
+    public AdminController(UserService service) {
         this.service = service;
     }
 
@@ -42,7 +39,7 @@ public class AdminController {
     }
 
     @GetMapping("/edit")
-    public String editUser(@ModelAttribute("id") Long id, Model model) {
+    public String editUser(@RequestParam("id") Long id, Model model) {
         User user = service.findById(id);
         model.addAttribute("user", user);
         return "edit";

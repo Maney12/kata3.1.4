@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserDetailService;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
 
@@ -15,13 +15,13 @@ import java.security.Principal;
 @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private final UserDetailService service;
-    @Autowired
-    private UserDetailService userDetailService;
 
-    public UserController(UserDetailService service) {
-        this.service = service;
+
+    private final UserService userDetailService;
+
+    @Autowired
+    public UserController(UserService userDetailService) {
+        this.userDetailService = userDetailService;
     }
 
     @GetMapping
