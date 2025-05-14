@@ -48,4 +48,10 @@ public class Role implements GrantedAuthority {
         Role role = (Role) o;
         return Objects.equals(id, role.id) && Objects.equals(name, role.name);
     }
+
+    @Override
+    public String toString() {
+        String original = name;
+        return original.split("_")[1];
+    }
 }

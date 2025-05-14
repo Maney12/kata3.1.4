@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -16,6 +17,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int age;
 
     private String username;
 
@@ -26,9 +28,7 @@ public class User implements UserDetails {
     @Column(name = "name")
     private String firstName;
 
-    @Column(name = "last_name")
     private String lastName;
-
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -38,13 +38,14 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(String username, String password, String firstName, String lastName, String email, Set<Role> roles) {
+    public User(String username, String password, String firstName, String lastName, String email, Set<Role> roles, int age) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.roles = roles;
+        this.age = age;
     }
 
     public User(Long id, String firstName, String lastName, String email) {
@@ -54,10 +55,14 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public User(String firstName, String lastName, String email) {
+    public User(String firstName, String lastName, int age, String email, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.age = age;
+        this.password = password;
+        this.roles = roles;
+
     }
 
     public User() {
@@ -112,6 +117,21 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getRolesAsString() {
+        if (roles == null || roles.isEmpty()) {
+            return "No roles";
+        }
+        return roles.stream().map(Role::toString).collect(Collectors.joining(","));
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;
@@ -146,5 +166,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
 

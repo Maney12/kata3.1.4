@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public class UserDaoImp implements UserDao {
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -26,11 +25,10 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void updateUser(User user) {
-        if (user.getId() != null) {
-            entityManager.merge(user);
-        } else {
-            entityManager.persist(user);
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("Нельзя обновить пользователя с null ID");
         }
+        entityManager.merge(user);
     }
 
     @Override
@@ -42,7 +40,10 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public User findById(long id) {
+    public User findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         return entityManager.find(User.class, id);
     }
 
@@ -56,6 +57,11 @@ public class UserDaoImp implements UserDao {
     @Override
     public void saveRole(Role role) {
         entityManager.persist(role);
+    }
+
+    @Override
+    public List<Role> listRoles() {
+        return entityManager.createQuery("from Role", Role.class).getResultList();
     }
 
 

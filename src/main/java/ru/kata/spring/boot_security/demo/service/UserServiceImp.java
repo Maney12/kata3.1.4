@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.service;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,13 +11,13 @@ import ru.kata.spring.boot_security.demo.dao.UserDaoImp;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImp implements UserService, UserDetailsService {
-
     private final UserDaoImp userDao;
-
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -43,10 +42,20 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Transactional
     @Override
     public void updateUser(User user) {
+
+        if (user == null || user.getId() == null) {
+            throw new IllegalArgumentException("Пользователь или его ID не могут быть null при обновлении");
+        }
         User existingUser = userDao.findById(user.getId());
+        if (existingUser == null) {
+            throw new IllegalArgumentException("Пользователь с ID " + user.getId() + " не найден");
+        }
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setEmail(user.getEmail());
+        existingUser.setAge(user.getAge());
+        existingUser.setUsername(user.getUsername());
+        existingUser.setRoles(user.getRoles());
 
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -63,7 +72,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Transactional
     @Override
-    public User findById(long id) {
+    public User findById(Long id) {
         return userDao.findById(id);
     }
 
@@ -78,6 +87,30 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public Role saveRole(Role role) {
         userDao.saveRole(role);
         return role;
+    }
+
+    @Override
+    public List<Role> listRoles() {
+        return userDao.listRoles();
+    }
+
+    @Override
+    public Set<Role> convertRoles(List<String> roleNames) {
+        Set<Role> roles = new HashSet<>();
+        if (roleNames != null && !roleNames.isEmpty()) {
+            for (String roleName : roleNames) {
+                Role role = listRoles().stream()
+                        .filter(r -> r.getName().equals(roleName))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
+                roles.add(role);
+            }
+            return roles;
+        } else {
+            roles.add(new Role("ROLE_USER"));
+            return roles;
+        }
+
     }
 
     @Transactional

@@ -14,9 +14,11 @@ public interface UserDao {
 
     void deleteUserById(long id);
 
-    public User findById(long id);
+    User findById(Long id);
 
     User findByUsername(String username);
 
     void saveRole(Role role);
+
+    List<Role> listRoles();
 }
