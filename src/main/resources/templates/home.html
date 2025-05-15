@@ -83,6 +83,8 @@
     <div class="row">
         <nav class="col-md-2 d-none d-md-block sidebar py-3">
             <div class="nav flex-column" id="sidebarButtons">
+
+                <a class="nav-link" th:if="${#httpServletRequest.isUserInRole('ADMIN')}" th:href="@{/admin/}">Admin</a>
                 <a class="nav-link active" th:href="@{/user}">User</a>
             </div>
         </nav>

@@ -113,6 +113,17 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     }
 
+    @Override
+    public String usernameGenerator() {
+        List<User> users = userDao.listUsers();
+        if (users.isEmpty()) {
+            return "guest№1";
+        }
+        String id = users.get(users.size() - 1).getId().toString();
+        return "guest№" + id;
+    }
+
+
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -36,6 +36,7 @@ public class AdminController {
         User currentUser = service.findByUsername(principal.getName());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("allRoles", service.listRoles());
+        model.addAttribute("username", service.usernameGenerator());
         return "add";
     }
 

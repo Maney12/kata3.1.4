@@ -24,4 +24,6 @@ public interface UserService {
     List<Role> listRoles();
 
     Set<Role> convertRoles(List<String> roles);
+
+    String usernameGenerator();
 }

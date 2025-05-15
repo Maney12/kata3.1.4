@@ -211,8 +211,7 @@
                                                            class="form-label"><b>Password</b></label>
                                                     <input type="password" class="form-control w-50 mx-auto"
                                                            id="password_[[${user.id}]]"
-                                                           name="password" placeholder="Enter new password"
-                                                           required minlength="8">
+                                                           name="password"  th:value="${user.password}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="roles_[[${user.id}]]"
