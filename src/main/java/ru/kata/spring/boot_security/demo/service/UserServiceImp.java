@@ -29,6 +29,9 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Transactional
     @Override
     public void add(User user) {
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            user.setUsername(usernameGenerator());
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.add(user);
     }
@@ -119,7 +122,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         if (users.isEmpty()) {
             return "guest№1";
         }
-        String id = users.get(users.size() - 1).getId().toString();
+        long id = users.get(users.size() - 1).getId() + 1;
         return "guest№" + id;
     }
 
