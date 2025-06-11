@@ -55,3 +55,4 @@ public class Role implements GrantedAuthority {
         return original.split("_")[1];
     }
 }
+

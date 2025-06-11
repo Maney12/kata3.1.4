@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class UserServiceImp implements UserService, UserDetailsService {
+public class UserServiceImp implements UserService {
     private final UserDaoImp userDao;
     private final PasswordEncoder passwordEncoder;
 
@@ -30,7 +30,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public void add(User user) {
         if (user.getUsername() == null || user.getUsername().isEmpty()) {
-            user.setUsername(usernameGenerator());
+            user.setUsername(user.getEmail());
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.add(user);
@@ -59,6 +59,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         existingUser.setAge(user.getAge());
         existingUser.setUsername(user.getUsername());
         existingUser.setRoles(user.getRoles());
+        existingUser.setUsername(user.getEmail());
 
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -96,36 +97,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public List<Role> listRoles() {
         return userDao.listRoles();
     }
-
-    @Override
-    public Set<Role> convertRoles(List<String> roleNames) {
-        Set<Role> roles = new HashSet<>();
-        if (roleNames != null && !roleNames.isEmpty()) {
-            for (String roleName : roleNames) {
-                Role role = listRoles().stream()
-                        .filter(r -> r.getName().equals(roleName))
-                        .findFirst()
-                        .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
-                roles.add(role);
-            }
-            return roles;
-        } else {
-            roles.add(new Role("ROLE_USER"));
-            return roles;
-        }
-
-    }
-
-    @Override
-    public String usernameGenerator() {
-        List<User> users = userDao.listUsers();
-        if (users.isEmpty()) {
-            return "guest№1";
-        }
-        long id = users.get(users.size() - 1).getId() + 1;
-        return "guest№" + id;
-    }
-
 
     @Transactional
     @Override

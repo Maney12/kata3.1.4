@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ public class WebSecurityConfig {
     private final SuccessUserHandler successUserHandler;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public WebSecurityConfig(UserDetailsService userDetailsServiceService, SuccessUserHandler successUserHandler, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsServiceService;
         this.successUserHandler = successUserHandler;

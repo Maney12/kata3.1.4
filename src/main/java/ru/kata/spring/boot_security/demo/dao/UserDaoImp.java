@@ -25,11 +25,14 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void updateUser(User user) {
+        
         if (user.getId() == null) {
             throw new IllegalArgumentException("Нельзя обновить пользователя с null ID");
         }
         entityManager.merge(user);
     }
+
+
 
     @Override
     public void deleteUserById(long id) {

@@ -30,5 +30,4 @@ public class AdminViewController {
         model.addAttribute("allRoles", service.listRoles());
         return "index";
     }
-
 }
